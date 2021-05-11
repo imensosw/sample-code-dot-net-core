@@ -1,0 +1,205 @@
+﻿@model Memento.Models.ProjectViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/jquery-1.11.min.js" type="text/javascript"></script>
+<script src="~/Scripts/jquery-ui-1.9.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.js" type="text/javascript"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js" type="text/javascript"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<script src="~/Scripts/expressive.annotations.validate.js" type="text/javascript"></script>
+<style>
+    select.form-control:not([size]):not([multiple]) {
+        height: calc(2.25rem + 10px);
+    }
+
+    .dataTables_length, .dataTables_filter {
+        display: block !important;
+    }
+</style>
+@Html.Partial("_Sidebar")
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="form-header">
+        <a href="projects.php"><i class="fa fa-chevron-left"></i></a> Add New Project
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <div class="ml-auto userinfo">
+            <a href="" class="mr-4 notify"><i class="fa fa-bell-o"></i></a>
+            <div class="user-area dropdown">
+
+                <a class="dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img src="~/images/avatar-3.png" class="rounded mr-2" width="30">
+                    Alice Smith
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Profile</a>
+                    <a class="dropdown-item" href="#">Setting</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Logout</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</nav>
+<main class="offset">
+
+    <div class="container-fluid" id="createproject">
+        <form asp-action="SaveProject" asp-controller="Project" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="row gutter pt-4">
+                <div class="col-lg-8 offset-lg-2">
+                    <div class="d-card">
+                        <h4>Basic Details</h4>
+                        <div class="form-group">
+                            <label>Title</label>
+                            @Html.HiddenFor(model => model.ProjectM.Id, new { @id = "hidProjectId" })
+                            @Html.TextBoxFor(model => model.ProjectM.Title, new { @id = "txtPTitle", @class = "form-control", placeholder = "Enter your Name" })
+                            @Html.ValidationMessageFor(model => model.ProjectM.Title)
+                        </div>
+                        <div class="form-group">
+                            <label>Industries</label>
+                            @Html.ListBoxFor(m => m.ProjectM.IndustriesSelectedList, new MultiSelectList(Model.ProjectM.IndustriesList, "CategoryId", "CategoryName", Model.ProjectM.IndustriesSelectedList), new { @class = "chosen-select", @multiple = "multiple", @placeholder = "Please select Industry" })
+                        </div>
+
+                        <div class="form-group">
+                            <label>Services</label>
+                            @Html.ListBoxFor(m => m.ProjectM.ServicesSelectedList, new SelectList(Model.ProjectM.ServicesList, "CategoryId", "CategoryName", Model.ProjectM.ServicesSelectedList), new { @class = "chosen-select", @multiple = "multiple", @placeholder = "Please select Services" })
+                        </div>
+                        <div class="form-group">
+                            <label>Technologies</label>
+                            @Html.ListBoxFor(m => m.ProjectM.TechnologiesSelectedList, new SelectList(Model.ProjectM.TechnologiesList, "CategoryId", "CategoryName", Model.ProjectM.TechnologiesSelectedList), new { @class = "chosen-select", @multiple = "multiple", @placeholder = "Please select Technology" })
+                        </div>
+                        <div class="form-group">
+                            <label>Tags</label>
+                            @Html.ListBoxFor(m => m.ProjectM.TagsSelectedList, new SelectList(Model.ProjectM.TagsList, "CategoryId", "CategoryName", Model.ProjectM.TagsSelectedList), new { @class = "chosen-select", @multiple = "multiple", @placeholder = "Please select Tag" })
+                        </div>
+                    </div>
+                    <div class="d-card mt-4">
+                        <h4>Description</h4>
+                        <div class="form-group">
+                            @Html.TextAreaFor(model => model.ProjectM.Description, new { @id = "txtPDescription", @class = "form-control", placeholder = "Enter Description" })
+                            @Html.ValidationMessageFor(model => model.ProjectM.Description)
+                        </div>
+                    </div>
+                    <div class="d-card mt-4">
+                        <h4>Requirement Documents</h4>
+                        <div class="form-group">
+                            <label>RUD</label>
+                            @Html.TextBoxFor(model => model.ProjectM.flRUDDocumentPath, new { @id = "flRUDDocumentPath", @class = "form-control", @type = "file", accept = ".doc,.docx, .xls,.ppt, .pptx, .pdf,.html,.xlsm,.xlsx,.txt" })
+                            @Html.ValidationMessageFor(model => model.ProjectM.flRUDDocumentPath)
+                            @Html.HiddenFor(model => model.ProjectM.RUDDocumentPath, new { @id = "hidRUDDocumentPath" })<br />
+                            @if (Model.ProjectM.RUDDocumentPath != null && Model.ProjectM.RUDDocumentPath.Length > 0)
+                            {
+                                <a alt="" href='@Model.ProjectM.RUDDocumentPath'>'@Model.ProjectM.RUDDocumentPath'</a>
+                            }
+                        </div>
+                        <div class="form-group">
+                            <label>Initial Scope Document</label>
+                            @Html.TextBoxFor(model => model.ProjectM.flInitialScopeDocPath, new { @id = "flInitialScopeDocPath", @class = "form-control", @type = "file", accept = ".doc,.docx, .xls,.ppt, .pptx, .pdf,.html,.xlsm,.xlsx,.txt" })
+                            @Html.ValidationMessageFor(model => model.ProjectM.flInitialScopeDocPath)
+                            @Html.HiddenFor(model => model.ProjectM.InitialScopeDocPath, new { @id = "hidInitialScopeDocPath" })<br />
+                            @if (Model.ProjectM.InitialScopeDocPath != null && Model.ProjectM.InitialScopeDocPath.Length > 0)
+                            {
+                                <a alt="" href='@Model.ProjectM.InitialScopeDocPath'>'@Model.ProjectM.InitialScopeDocPath'</a>
+                            }
+                        </div>
+                        <div class="form-group">
+                            <label>Updated Scope Document </label>
+                            @Html.TextBoxFor(model => model.ProjectM.flUpdatedScopeDocPath, new { @id = "flUpdatedScopeDocPath", @class = "form-control", @type = "file", accept = ".doc,.docx, .xls,.ppt, .pptx, .pdf,.html,.xlsm,.xlsx,.txt" })
+                            @Html.ValidationMessageFor(model => model.ProjectM.flUpdatedScopeDocPath)
+                            @Html.HiddenFor(model => model.ProjectM.UpdatedScopeDocPath, new { @id = "hidUpdatedScopeDocPath" })<br />
+                            @if (Model.ProjectM.UpdatedScopeDocPath != null && Model.ProjectM.UpdatedScopeDocPath.Length > 0)
+                            {
+                                <a alt="" href='@Model.ProjectM.UpdatedScopeDocPath'>'@Model.ProjectM.UpdatedScopeDocPath'</a>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="d-card mt-4">
+                        <h4>Client Details</h4>
+                        <div class="form-group">
+                            <label>Client Name</label>
+                            @Html.TextBoxFor(model => model.ProjectM.ClientName, new { @id = "txtPClientName", @class = "form-control", placeholder = "Enter your Client Name" })
+                            @Html.ValidationMessageFor(model => model.ProjectM.ClientName)
+                        </div>
+                        <div class="form-group">
+                            <label>Client Logo</label>
+                            @Html.TextBoxFor(model => model.ProjectM.flClientLogoPath, new { @id = "flClientLogoPath", @class = "form-control", @type = "file", accept = ".jpg,.png,.gif,.jpeg" })
+                            @Html.ValidationMessageFor(model => model.ProjectM.flClientLogoPath)
+                            @Html.HiddenFor(model => model.ProjectM.ClientLogoPath, new { @id = "hidClientLogoPath" })
+                        </div>
+                    </div>
+
+                    <div class="d-card mt-4">
+                        <h4>Picture</h4>
+                        <div class="form-group">
+                            <label>Add Image</label>
+                            @Html.TextBoxFor(model => model.ProjectM.flProjectImagePath, new { @id = "flProjectImagePath", @class = "form-control", @type = "file", accept = ".jpg,.png,.gif,.jpeg" })
+                            @Html.ValidationMessageFor(model => model.ProjectM.flProjectImagePath)
+                            @Html.HiddenFor(model => model.ProjectM.ProjectImagePath, new { @id = "hidProjectImagepath" })
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-3">
+                                @if (Model.ProjectM.ProjectImagePath != null && Model.ProjectM.ProjectImagePath.Length > 0)
+                                {
+                                    <img id="imgPicture" src='@Model.ProjectM.ProjectImagePath' class="img-fluid">
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-card mt-4">
+                        <h4>Demo Details</h4>
+                        <div class="form-group">
+                            <label>Please enter all demo user logins and urls</label>
+                            @Html.TextAreaFor(model => model.ProjectM.DemoDetail, new { @id = "txtPDemoDetail", @class = "form-control", placeholder = "Enter Demo Information" })
+                            @Html.ValidationMessageFor(model => model.ProjectM.DemoDetail)
+                        </div>
+                    </div>
+                    <div class="d-card mt-4 mb-5">
+                        <h4>Feedback</h4>
+                        <div class="form-group">
+                            <label>Author Name</label>
+                            @Html.TextAreaFor(model => model.ProjectM.FAuthorName, new { @id = "txtPFAuthorName", @class = "form-control", placeholder = "Enter Author Name" })
+                            @Html.ValidationMessageFor(model => model.ProjectM.FAuthorName)
+                        </div>
+                        <div class="form-group">
+                            <label>Author Image</label>
+                            @Html.TextBoxFor(model => model.ProjectM.flFAuthorImagePath, new { @id = "flFAuthorImagePath", @class = "form-control", @type = "file", accept = ".jpg,.png,.gif,.jpeg" })
+                            @Html.ValidationMessageFor(model => model.ProjectM.flFAuthorImagePath)
+                            @Html.HiddenFor(model => model.ProjectM.FAuthorImagePath, new { @id = "hidFAuthorImagePath" })
+                        </div>
+                        <div class="form-group">
+                            <label>Feedback</label>
+                            @Html.TextAreaFor(model => model.ProjectM.FFeedback, new { @id = "txtPFFeedback", @class = "form-control", placeholder = "Enter Feedback" })
+                            @Html.ValidationMessageFor(model => model.ProjectM.FFeedback)
+                        </div>
+                    </div>
+                </div>
+            </div><!--/row-->
+            <div class="fixed-actions">
+                <a href="" class="btn btn-default-2 mr-2">Cancel</a>
+                <button class="btn btn-secondary" id="btnSubmit" type="submit">
+                    <i class="loader"></i>
+                    Save Changes
+                </button>
+
+            </div>
+        </form>
+    </div>
+
+</main>
+<script type="text/javascript">
+    $('form').submit(function () {
+        debugger;
+        if ($(this).valid()) {
+            $(this).find(':submit').attr('disabled', 'disabled');
+        }
+    });
+</script>

@@ -1,0 +1,107 @@
+﻿@model Memento.Models.AccountViewModel
+
+@{
+    Layout = null;
+
+}
+<!doctype html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="profile" href="http://gmpg.org/xfn/11">
+    <title>Memento | Imenso Software </title>
+    <link rel='stylesheet' href='~/css/bootstrap.min.css' media='all' />
+    <link rel='stylesheet' href='~/css/style.css' media='all' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" media="all">
+    <link href="https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap" rel="stylesheet">
+    <script src="~/Scripts/jquery-1.11.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery-ui-1.9.2.min.js"></script>
+    <script src="~/Scripts/jquery.validate.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/expressive.annotations.validate.js" type="text/javascript"></script>
+
+</head>
+<body style="background: url('../images/bg.jpg'); background-size: cover; background-repeat: no-repeat; min-height: 100vh;">
+
+    <div class="box-centered">
+        <div class="text-center">
+            <img src="images/brand-logo.png" width="100">
+            <h4 class="mt-4">Memento Login</h4>
+        </div>
+        <div id="Errordiv" style="display:none;">
+            <div class="alert alert-danger" id="diverrorlogin">
+                <label for="" class="field-validation-error lblLoginErrorMessage">@ViewBag.ErrorMessage</label>
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="">E-mail address</label>
+            @Html.TextBoxFor(model => model.loginModel.EmailAddress, new { @id = "txtLoginEmailAddress", @class = "form-control", placeholder = "Enter your e-mail address", @type = "email" })
+            @Html.ValidationMessageFor(model => model.loginModel.EmailAddress)
+        </div>
+        <div class="form-group">
+            <label for="">Password</label>
+            @Html.TextBoxFor(model => model.loginModel.Password, new { @id = "txtLoginPassword", @class = "form-control", placeholder = "Enter your password", @type = "password" })
+            @Html.ValidationMessageFor(model => model.loginModel.Password)
+        </div>
+        <div class="form-group">
+            <a href="#" class="btn btn-primary btn-block mt-5" id="login">Login</a>
+
+        </div>
+
+    </div>
+
+
+
+
+</body>
+</html>
+
+    <div class="varification forgot" id="forgotverificationpopup" style="display:none;">
+        <div class="varificaiton__overlay"></div>
+        <div class="varificaiton__content text-center forgot">
+            <div class="alert alert-danger" id="diverrorlogin">
+                <label for="" class="field-validation-error lblLoginErrorMessage" id="lblError"></label>
+            </div>
+            <a href="@Url.Content("~/")" class="btn  btn-login mt-4" id="vlogin">Login</a>
+        </div>
+    </div>
+
+
+<script type="text/javascript">
+    $("#login").click(function () {
+        var loginDetails = {
+            EmailAddress: $('#txtLoginEmailAddress').val(),
+            Password: $('#txtLoginPassword').val()
+
+        };
+        debugger;
+        $.ajax({
+            url: '@Url.Action("Login","Account")',
+            cache: false,
+            data: { emailAddress: loginDetails.EmailAddress, password: loginDetails.Password },
+            success: function (data) {
+                if (data.success) {
+                    window.location = "../Dashboard/index";
+                }
+                else {                   
+                    $("#forgotverificationpopup").show();
+                    $("#lblError").html(data.responseText);
+
+                }
+
+            },
+            error: function (xhr) {
+                //alert("jquery error");
+                alert(xhr.responseText);
+
+            }
+        });
+
+            });
+
+</script>

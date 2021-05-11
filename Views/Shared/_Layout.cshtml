@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] </title>
+   
+    @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" media="all">
+    <link href="https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.rawgit.com/atatanasov/gijgo/master/dist/combined/css/gijgo.min.css" rel="stylesheet" type="text/css" />*@
+    <link rel='stylesheet' href='~/css/bootstrap.min.css' media='all' />
+    <link rel='stylesheet' href='~/css/style.css' media='all' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" media="all">
+    <link href="https://fonts.googleapis.com/css2?family=Sen:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    @RenderBody()
+
+
+
+   
+    <script type="text/javascript">
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    <script src="~/js/chosen.jquery.js" type="text/javascript"></script>
+    <script src="~/js/prism.js" type="text/javascript" charset="utf-8"></script>
+    <script src="~/js/init.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="~/js/datepicker.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#datepicker').datepicker({
+                uiLibrary: 'bootstrap'
+            });
+            $('#datepicker2').datepicker({
+                uiLibrary: 'bootstrap'
+            });
+            $('#datepicker3').datepicker({
+                uiLibrary: 'bootstrap'
+            });
+            $('#datepicker4').datepicker({
+                uiLibrary: 'bootstrap'
+            });
+            $('#datepicker5').datepicker({
+                uiLibrary: 'bootstrap'
+            });
+            $('#datepicker6').datepicker({
+                uiLibrary: 'bootstrap'
+            });
+
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+﻿@model Memento.Models.AccountViewModel
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+<div id="LoginGridList">
+    @*@if (!string.IsNullOrWhiteSpace(Model.loginModel.ErrorCode))
+    {
+        if (Model.loginModel.ErrorCode == "Error")
+        {
+            <div class="alert alert-danger" id="diverrorlogin">
+                <label for="" class="field-validation-error lblLoginErrorMessage">@Model.loginModel.ErrorMessage</label>
+            </div>
+        }
+    }*@
+    <div class="form-group">
+        <label for="">E-mail address</label>
+        @Html.TextBoxFor(model => model.loginModel.EmailAddress, new { @id = "txtLoginEmailAddress", @class = "form-control", placeholder = "Enter your e-mail address", @type = "email" })
+        @Html.ValidationMessageFor(model => model.loginModel.EmailAddress)
+    </div>
+    <div class="form-group">
+        <label for="">Password</label>
+        @Html.TextBoxFor(model => model.loginModel.Password, new { @id = "txtLoginPassword", @class = "form-control", placeholder = "Enter your password", @type = "password" })
+        @Html.ValidationMessageFor(model => model.loginModel.Password)
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var isLogin = '@Memento.Helper.SessionHelper.GetCurrentUserID()';
+         var isUserType = '@Memento.Helper.SessionHelper.GetCurrentUserType()';
+        if (isLogin > 0 && isUserType == "ADMIN") {
+            //window.location = "/Dashboard/Index/";
+        }
+        else {
+            $('#btnLogin').html('Login');
+        }
+    });
+    function ClearResultsLogin() {
+        $('#btnLogin').html('<i class="fa fa-spinner fa-spin"></i> Processing..');
+    }
+</script>
